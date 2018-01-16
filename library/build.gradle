@@ -1,0 +1,38 @@
+import proguard.gradle.ProGuardTask
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
+
+task makeJar(type: ProGuardTask, dependsOn: "build") {
+    // 默认生成的未混淆的jar路径
+    injars 'build/intermediates/bundles/release/classes.jar'
+    // 混淆后的jar输出路径
+    outjars 'build/outputs/banner-1.0.jar'
+    // 混淆规则
+    configuration 'proguard-rules.pro'
+}
